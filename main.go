@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -71,14 +72,14 @@ func GetAllMeetings(response http.ResponseWriter, request *http.Request) {
 		log.Println("Url Param 'key' is missing")
 		return
 	}
-	st := keys[0]
-	et := keys1[0]
-	json.NewEncoder(response).Encode(st)
-	json.NewEncoder(response).Encode(et)
+	st, err := strconv.Atoi(keys[0])
+	et, err := strconv.Atoi(keys1[0])
+	// json.NewEncoder(response).Encode(st)
+	// json.NewEncoder(response).Encode(et)
 	var people []Meeting
 	collection := client.Database("raj").Collection("meet")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	cursor, err := collection.Find(ctx, bson.M{})
+	cursor, err := collection.Find(ctx, bson.M{"starttime": bson.M{"$gte": st}, "endtime": bson.M{"$lte": et}})
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
