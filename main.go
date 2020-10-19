@@ -22,7 +22,7 @@ var client *mongo.Client
 type Meeting struct {
 	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	Title       string             `json:"title,omitempty" bson:"title,omitempty"`
-	Participant string             `json:"participant,omitempty" bson:"participant,omitempty"`
+	Participant Participants       `json:"participant,omitempty" bson:"participant,omitempty"`
 	StartTime   int64              `json:"starttime,omitempty" bson:"starttime,omitempty"`
 	EndTime     int64              `json:"endtime,omitempty" bson:"endtime,omitempty"`
 	Timestamp   time.Time          `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
